@@ -8,7 +8,7 @@ const computerChoice = () => {
 const humanChoice = () => {
   const choices = ["rock", "paper", "scissors"];
   const choice = prompt(
-    "Enter your choice (1: rock, 2: paper, 3: scissors, 4: quit)> "
+    "Enter your choice (1: rock, 2: paper, 3: scissors, 4: quit): "
   );
   console.log(`You play ${choices[choice - 1]}`);
   return parseInt(choice);
