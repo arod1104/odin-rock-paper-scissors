@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- <script type="module" src="game.js`"></script> -->
   </head>
   <body>
     <h1 class="title">Rock, Paper, Scissors</h1>
     <div class="game-info-container">
-      <p class="game-info rounds">Rounds Played: 0</p>
-      <p class="game-info user-score">User Score: 0</p>
-      <p class="game-info comp-score">Computer Score: 0</p>
+      <p id="rounds" class="game-info">Rounds Played: 0</p>
+      <p id="player-score" class="game-info">Player Score: 0</p>
+      <p id="computer-score" class="game-info">Computer Score: 0</p>
     </div>
     <div class="button-container">
-      <button id="rock-btn" class="game-btn">Rock</button>
-      <button id="paper-btn" class="game-btn">Paper</button>
-      <button id="scissors-btn" class="game-btn">Scissors</button>
+      <button id="rock-btn" class="game-btn" value="rock">Rock</button>
+      <button id="paper-btn" class="game-btn" value="paper">Paper</button>
+      <button id="scissors-btn" class="game-btn" value="scissors">
+        Scissors
+      </button>
     </div>
-    <div class="result">
-      <strong><em>You Win!/You Lose!/It's a Draw</em></strong>
-    </div>
+    <div id="result-text"></div>
     <div class="image-container">
-      <div class="image"><img src="./images/rock.jpg" /></div>
-      <div class="image"><img src="./images/scissors.jpg" /></div>
+      <div class="image-text">Player: <img id="player-image" src="" /></div>
+      <div class="image-text">Computer: <img id="computer-image" src="" /></div>
     </div>
   </body>
+  <script src="game.js"></script>
 </html>

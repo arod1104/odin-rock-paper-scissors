@@ -6,83 +6,112 @@ const computerChoice = () => {
   return choices[randomChoice];
 };
 
-const humanChoice = () => {
-  const choice = prompt(
-    "Enter your choice (1: rock, 2: paper, 3: scissors, 4: quit): "
-  );
-  console.log(`You play ${choices[choice - 1]}`);
-  return parseInt(choice);
-};
-
-const playRound = (userChoice, compChoice) => {
-  switch (userChoice) {
-    case 1:
-      if (compChoice === "rock") {
-        return 0;
-      } else if (compChoice === "scissors") {
-        return 1;
-      } else {
-        return 2;
-      }
-      break;
-    case 2:
-      if (compChoice === "paper") {
-        return 0;
-      } else if (compChoice === "rock") {
-        return 1;
-      } else {
-        return 2;
-      }
-      break;
-    case 3:
-      if (compChoice === "scissors") {
-        return 0;
-      } else if (compChoice === "paper") {
-        return 1;
-      } else {
-        return 2;
-      }
-      break;
-    default:
-      return -1;
+function determineWinner(playerChoice, computerChoice) {
+  if (playerChoice === computerChoice) {
+    return "draw";
   }
-};
-
-let humanScore = 0;
-let computerScore = 0;
-
-const instructions = `Welcome to Rock Paper Scissors. You will be playing against the computer.
-  The rules are simple:
-    1. Rock beats Scissors
-    2. Scissors beats Paper
-    3. Paper beats Rock
-
-  Enter your choice when prompted:
-    1. Rock
-    2. Paper
-    3. Scissors
-    4. Quit the Game`;
-
-console.log(instructions);
-
-let userChoice = humanChoice();
-let compChoice = computerChoice();
-
-while (userChoice !== 4) {
-  const winner = playRound(userChoice, compChoice);
-
-  if (winner === 0) {
-    console.log("It's a tie!");
-  } else if (winner === 1) {
-    console.log("You win!");
-    humanScore = humanScore + 1;
-  } else if (winner === 2) {
-    console.log("You lose!");
-    computerScore = computerScore + 1;
+  if (
+    (playerChoice === "rock" && computerChoice === "scissors") ||
+    (playerChoice === "paper" && computerChoice === "rock") ||
+    (playerChoice === "scissors" && computerChoice === "paper")
+  ) {
+    return "player";
+  } else if (
+    (playerChoice === "rock" && computerChoice === "paper") ||
+    (playerChoice === "paper" && computerChoice === "scissors") ||
+    (playerChoice === "scissors" && computerChoice === "rock")
+  ) {
+    return "computer";
   } else {
-    console.log("Invalid choice. Please try again.");
+    return "ERROR";
   }
-  console.log(`Score: You: ${humanScore} Computer: ${computerScore}`);
-  userChoice = humanChoice();
-  compChoice = computerChoice();
 }
+
+const game = {
+  roundsPlayed: 0,
+  playerScore: 0,
+  computerScore: 0,
+  playerChoice: "",
+  computerChoice: "",
+  roundWinner: "",
+};
+
+const playRound = (playerChoice) => {
+  game.playerChoice = playerChoice;
+  game.roundsPlayed += 1;
+  game.computerChoice = computerChoice();
+  game.roundWinner = determineWinner(playerChoice, game.computerChoice);
+  if (game.roundWinner === "player") {
+    game.playerScore += 1;
+    game.roundWinner = "player";
+  } else if (game.roundWinner === "computer") {
+    game.computerScore += 1;
+    game.roundWinner = "computer";
+  } else if (game.roundWinner === "ERROR") {
+    console.log("Invalid choice");
+  }
+};
+
+const images = {
+  rock: "./images/rock.jpg",
+  paper: "./images/paper.jpg",
+  scissors: "./images/scissors.jpg",
+};
+
+const playAnimation = (game) => {
+  const playerImage = document.querySelector("#player-image");
+  const computerImage = document.querySelector("#computer-image");
+  const resultText = document.querySelector("#result-text");
+  const roundsPlayedText = document.querySelector("#rounds");
+  const playerScore = document.querySelector("#player-score");
+  const computerScore = document.querySelector("#computer-score");
+
+  // Array of image paths for cycling
+  const imageCycle = [images.rock, images.paper, images.scissors];
+
+  let cycleIndex = 0;
+
+  // Function to cycle through images
+  const cycleImages = () => {
+    console.log(cycleIndex);
+    playerImage.src = imageCycle[cycleIndex];
+    computerImage.src = imageCycle[cycleIndex];
+    cycleIndex = (cycleIndex + 1) % 3;
+  };
+
+  // Set an interval to cycle images every 100ms
+  const cycleInterval = setInterval(cycleImages, 100);
+
+  // After 1 second, stop cycling and display the results
+  setTimeout(() => {
+    clearInterval(cycleInterval);
+
+    // Set the images to the actual choices
+    playerImage.src = images[game.playerChoice];
+    computerImage.src = images[game.computerChoice];
+
+    // Display the result of the round
+    if (game.roundWinner === "player") {
+      resultText.textContent = `You Win!`;
+      playerScore.textContent = `Player Score: ${game.playerScore}`;
+    } else if (game.roundWinner === "computer") {
+      resultText.textContent = `You Lose!`;
+      computerScore.textContent = `Computer Score: ${game.computerScore}`;
+    } else if (game.roundWinner === "draw") {
+      resultText.textContent = `It's a Draw!`;
+    } else {
+      resultText.textContent = `Invalid Input!`;
+    }
+    roundsPlayedText.textContent = `Rounds Played: ${game.roundsPlayed}`;
+  }, 1000);
+};
+
+const gameButtons = document.querySelectorAll("button.game-btn");
+gameButtons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    console.log(`${e.target.value} clicked`);
+    playRound(e.target.value);
+    console.log(game);
+    playAnimation(game);
+  });
+});

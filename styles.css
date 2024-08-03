@@ -31,11 +31,11 @@ body {
   font-size: 28px;
 }
 
-.user-score {
+#player-score {
   color: blue;
 }
 
-.comp-score {
+#computer-score {
   color: red;
 }
 
@@ -59,19 +59,29 @@ button {
   min-width: 200px;
 }
 
-.result {
+#result-text {
+  height: 50px;
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 32px;
   margin: 56px;
+  font-weight: 700;
+  font-style: italic;
 }
 
 .image-container {
-  outline: solid 2px red;
+  /* outline: solid 2px red; */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 300px;
+}
+
+.image-text {
+  font-size: 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 img {
